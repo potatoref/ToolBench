@@ -202,8 +202,11 @@ def get_conv_template(name: str) -> Conversation:
     return conv_templates[name].copy()
 
 
-# A template with one conversation example
-register_conv_template(
+# Create a list to store the conversation templates
+conversation_templates = []
+
+# Register the conversation templates
+for conversation_template in [
     Conversation(
         name="one_shot",
         system="A chat between a curious human and an artificial intelligence assistant. "
@@ -240,8 +243,25 @@ register_conv_template(
         sep_style=SeparatorStyle.ADD_COLON_SINGLE,
         sep="\n### ",
         stop_str="###",
-    )
-)
+    ),
+    Conversation(
+        name="vicuna-v1.1",
+        system="A chat between a curious user and an artificial intelligence assistant. "
+        "The assistant gives helpful, detailed, and polite answers to the user's questions.",
+        roles=("USER", "ASSISTANT"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.ADD_COLON_TWO,
+        sep=" ",
+        sep2="</s>",
+    ),
+]
+):
+    conversation_templates.append(conversation_template)
+
+# Save the conversation templates to a file
+with open("conversation_templates.json", "w") as f:
+    json.dump(conversation_templates, f)
 
 # Vicuna v1.1 template
 register_conv_template(
